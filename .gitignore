@@ -1,0 +1,9 @@
+venv/
+data/
+__pycache__/
+*.pyc
+*.keras
+*.h5
+*.tflite
+*.npz
+.DS_Store
