@@ -40,6 +40,8 @@ But it is not explained by gross body size. Height, weight, and forearm circumfe
 | 6 | 24.42 +/- 1.69 | 61.74 +/- 1.31 |
 | 8 | 23.94 +/- 1.50 | 60.30 +/- 1.38 |
 
+Error bars at N=1-6 combine subject-draw and run-to-run variance; at N=8 only one draw exists (the full pool), so its error bar reflects run-to-run variance alone.
+
 Within-subject accuracy *falls* as subjects are added. The gap between the curves narrows (54 -> 36 pp) almost entirely because the upper curve descends, not because the lower one rises. Reporting this as "the gap closes" would be misleading.
 
 ## Extrapolation
