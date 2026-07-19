@@ -14,7 +14,7 @@ The first project compressed a 1D-CNN 4.4x with negligible accuracy loss — the
 | Amplitude / scaling differences | Three normalisation strategies | **Refuted** — 7% of the gap; rest-based calibration actively harmful (-13.8 pp) |
 | Armband rotation (correct it) | Oracle over all 8 possible shifts | **Refuted** — the best rotation is no rotation; the ceiling is zero |
 
-The conclusion those force: the cross-subject gap is **not geometric and not a scaling artefact**. It is anatomical. Different forearms produce genuinely different spatial signatures for the same intended gesture — not rotated versions, not rescaled versions, different ones.
+The conclusion those force: the cross-subject gap is **not geometric and not a scaling artefact**. What remains, by elimination, is anatomical — different forearms producing genuinely different spatial signatures for the same intended gesture, not rotated versions, not rescaled versions, different ones.
 
 So multi-subject training cannot teach a universal gesture pattern; there isn't one. At best it teaches a *distribution over anatomies*. That is interpolation, not generalisation — and it should saturate.
 
@@ -28,11 +28,13 @@ So multi-subject training cannot teach a universal gesture pattern; there isn't 
 | Cross-subject (train s1, test s2) | 27.62% |
 | Chance (17 classes) | 5.88% |
 
+For external reference, the published DB5 baseline is 69.04% — double-Myo setup, mDWT feature, SVM, 41 movements (Pizzolato *et al.*, 2017). That is a within-subject figure and is not comparable to any cross-subject number below.
+
 ## Headline result
 
 ![Scaling curve](figures/scaling_curve.png)
 
-**More subjects do not fix cross-subject transfer.** Cross-subject accuracy climbs from 17.6% (N=1) to 24.6% (N=4), then stops. N=6 and N=8 are indistinguishable from N=4. A saturating fit puts the asymptote at **25.0%** — below any deployable threshold — so there is no number of training subjects at which the data-only approach reaches 60%.
+**More subjects do not fix cross-subject transfer.** Cross-subject accuracy climbs from 17.6% (N=1) to 24.6% (N=4), then stops. N=6 and N=8 are indistinguishable from N=4. A saturating fit puts the asymptote at approximately **25%** (95% CI 20.4–29.7%) — below any deployable threshold. Even the upper bound of that interval lies less than half way to 60%, so the conclusion does not depend on the point estimate: there is no number of training subjects at which the data-only approach reaches a deployable accuracy here.
 
 Within-subject accuracy meanwhile *falls* (71.9% -> 60.3%) as subjects are added. The gap narrows because the top line descends, not because the bottom line rises.
 
@@ -58,12 +60,19 @@ Within-subject accuracy meanwhile *falls* (71.9% -> 60.3%) as subjects are added
 
 13x the parameters recovers within-subject accuracy (+5.7 pp) and leaves cross-subject accuracy unchanged. **The plateau is not a capacity artefact.** The extra capacity is spent memorising training anatomies; none of it transfers.
 
+## Who you transfer to matters more than how many you train on
+
+Leave-one-subject-out across all ten subjects: mean **25.35%**, ranging from 12.6% (s10) to 35.3% (s2) — a 22.7 pp spread, against roughly 1 pp of run-to-run noise. Between-person variance is 7.4x run-to-run variance.
+
+Body size does not explain it. Correlating LOSO accuracy against distance from the nine training subjects in (height, weight, forearm circumference) space gives r = -0.07, p = 0.84, n=10. Tested individually: BMI r = -0.05, height r = +0.09, weight r = +0.04, forearm circumference r = +0.41 (p = 0.24). None significant.
+
+![Anatomical distance vs accuracy](figures/anatomy_vs_accuracy.png)
+
+Full analysis, limitations, and how these numbers sit against the literature: [`findings.md`](findings.md).
+
 ## Status
 
 Phases 0-5 complete, including LOSO across all ten subjects. Few-shot calibration in progress.
-
-
----
 
 ---
 
@@ -105,6 +114,13 @@ modules imported by the scripts above, not run directly.
 
 Subjects 9 and 10 are held out permanently from the scaling experiments and
 appear only in the LOSO analysis.
+
+## Method notes
+
+- **Split by repetition, following the published Ninapro protocol.** Train on repetitions 1, 3, 4 and 6; validate on 2; test within-subject on 5. This is the split used by the dataset authors (Pizzolato *et al.*, 2017), and it matters: the six repetitions of each gesture are near-identical, so a random split places near-duplicates in both train and test.
+- **200 ms windows with 100 ms overlap**, also matching the published protocol.
+- **Normalisation statistics computed from the training subjects only.** `check_split.py` verifies that those statistics do not change when the test subject changes.
+- **Subjects 9 and 10 are locked.** They are never trained on and never tuned on in the scaling experiments.
 
 ## Dataset
 
