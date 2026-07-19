@@ -16,11 +16,11 @@ This study asks a question with a shape rather than a yes/no: **how much does cr
 
 | # | Hypothesis / question | Test | Result |
 |---|---|---|---|
-| 1 | More training subjects will steadily improve cross-subject transfer | Scaling curve, N = 1,2,4,6,8, 3 draws x 3 runs, held-out subjects 9+10 | **Refuted** — rises 17.6% -> 24.6% by N=4, then flat (N=6: 24.4%, N=8: 23.9%). Saturating fit asymptote = 25.0% |
+| 1 | More training subjects will steadily improve cross-subject transfer | Scaling curve, N = 1,2,4,6,8, up to 3 draws x 3 runs, held-out subjects 9+10 | **Refuted** — rises 17.6% -> 24.6% by N=4, then flat (N=6: 24.4%, N=8: 23.9%). Saturating fit asymptote ≈ 25% (95% CI 20.4-29.7%) |
 | 2 | The plateau is an artefact of the model being too small to hold many anatomies | Widen the CNN 13x (18.5k -> 246k params) at fixed N=8 | **Refuted** — within-subject recovers +5.7 pp, cross-subject unchanged (23.5% -> 22.2%). Extra capacity is spent memorising training anatomies |
-| 3 | Cross-subject accuracy is roughly the same for everyone | Leave-one-subject-out across all 10 subjects, 3 runs each | **Refuted** — mean 25.35%, but ranges 12.6% (s10) to 35.3% (s2), a 22.7 pp spread. Between-person variance is ~10x run-to-run variance |
+| 3 | Cross-subject accuracy is roughly the same for everyone | Leave-one-subject-out across all 10 subjects, 3 runs each | **Refuted** — mean 25.35%, but ranges 12.6% (s10) to 35.3% (s2), a 22.7 pp spread. Between-person variance is 7.4x run-to-run variance |
 | 4 | The subjects the model fails on are those most unlike the training set in body size | Correlate LOSO accuracy with distance from the 9 training subjects in (height, weight, forearm circumference) space | **Refuted** — r = -0.07, p = 0.84, n=10. No relationship, and no visible trend |
-| 5 | The LOSO mean is an artefact of the specific s9+s10 test set | Compare the 2-subject held-out result against the 10-subject LOSO mean | **Consistent** — LOSO mean (25.35%) matches the scaling-curve asymptote (25.0%) to within 0.35 pp |
+| 5 | The scaling-curve plateau is an artefact of the specific s9+s10 test set | Compare the 2-subject held-out result against the 10-subject LOSO mean | **Not supported** — LOSO mean (25.35%) matches the scaling asymptote to within 0.4 pp. s9 and s10 are among the ten, so the figures are not independent, but they sit at opposite ends of the LOSO range (33.2% and 12.6%), so the pair was neither an unusually easy nor an unusually hard test set |
 
 ## What the results force
 
