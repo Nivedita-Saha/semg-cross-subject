@@ -60,4 +60,4 @@ Within-subject accuracy meanwhile *falls* (71.9% -> 60.3%) as subjects are added
 
 ## Status
 
-Phases 0-4 complete. LOSO (all ten subjects) and few-shot calibration in progress.
+Phases 0-5 complete, including LOSO across all ten subjects. Few-shot calibration in progress.
