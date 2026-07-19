@@ -44,7 +44,7 @@ Within-subject accuracy meanwhile *falls* (71.9% -> 60.3%) as subjects are added
 | 6 | 24.42 +/- 1.69 | 61.74 +/- 1.31 |
 | 8 | 23.94 +/- 1.50 | 60.30 +/- 1.38 |
 
-3 subject draws x 3 runs per point. Subjects 9 and 10 held out permanently.
+3 subject draws x 3 runs per point, except at N=8 where only one draw exists (the full pool of 8). Error bars at N=1-6 therefore combine subject-draw and run-to-run variance; at N=8 the error bar reflects run-to-run variance alone. Subjects 9 and 10 held out permanently.
 
 ## The obvious objection, ruled out
 
@@ -65,6 +65,8 @@ Phases 0-5 complete, including LOSO across all ten subjects. Few-shot calibratio
 
 ---
 
+---
+
 ## Running
 
 ```
@@ -79,6 +81,8 @@ python src/check_subjects.py      # Phase 1   — verify all 10 subjects
 python src/build_cache.py         # Phase 2   — window and cache (35,305 windows)
 python src/check_split.py         # Phase 2   — leakage check on the split
 
+python src/reproduce_seeds.py     # Milestone 1 — VALIDATION GATE (see below)
+
 python src/scaling.py             # Phase 3   — scaling curve, N = 1,2,4,6,8
 python src/plot_scaling.py        # Phase 4   — the headline figure
 
@@ -87,9 +91,20 @@ python src/loso.py                # Phase 5   — leave-one-subject-out, all 10
 python src/demographics.py        # Phase 5.3 — body-size correlation
 ```
 
-`preprocess.py`, `windowing.py`, `model.py`, and `data_pipeline.py` are shared modules imported by the scripts above, not run directly.
+**The validation gate.** Before any new experiment is run, the pipeline must
+reproduce the `semg-edge-ai` result it inherits: train on s1, test on s2,
+expecting ~74.13% within-subject and ~27.62% cross-subject. `reproduce_seeds.py`
+runs this across three seeds, because a single run cannot distinguish a sound
+pipeline from a broken one that got lucky. If the expected values do not sit
+within roughly two standard deviations of the means, there is a bug and the
+experiments below are not worth running. (`reproduce.py` is the single-seed
+version, kept for reference.)
 
-Subjects 9 and 10 are held out permanently from the scaling experiments and appear only in the LOSO analysis.
+`preprocess.py`, `windowing.py`, `model.py`, and `data_pipeline.py` are shared
+modules imported by the scripts above, not run directly.
+
+Subjects 9 and 10 are held out permanently from the scaling experiments and
+appear only in the LOSO analysis.
 
 ## Dataset
 
