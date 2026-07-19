@@ -61,3 +61,36 @@ Within-subject accuracy meanwhile *falls* (71.9% -> 60.3%) as subjects are added
 ## Status
 
 Phases 0-5 complete, including LOSO across all ten subjects. Few-shot calibration in progress.
+
+
+---
+
+## Running
+
+```
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Data is not included. Register at [ninapro.hevs.ch](https://ninapro.hevs.ch) to download DB5 and place the subject files in `data/raw/`.
+
+```
+python src/check_subjects.py      # Phase 1   — verify all 10 subjects
+python src/build_cache.py         # Phase 2   — window and cache (35,305 windows)
+python src/check_split.py         # Phase 2   — leakage check on the split
+
+python src/scaling.py             # Phase 3   — scaling curve, N = 1,2,4,6,8
+python src/plot_scaling.py        # Phase 4   — the headline figure
+
+python src/capacity_control.py    # Phase 3.5 — width sweep at fixed N=8
+python src/loso.py                # Phase 5   — leave-one-subject-out, all 10
+python src/demographics.py        # Phase 5.3 — body-size correlation
+```
+
+`preprocess.py`, `windowing.py`, `model.py`, and `data_pipeline.py` are shared modules imported by the scripts above, not run directly.
+
+Subjects 9 and 10 are held out permanently from the scaling experiments and appear only in the LOSO analysis.
+
+## Dataset
+
+Pizzolato, S., Tagliapietra, L., Cognolato, M., Reggiani, M., Müller, H. and Atzori, M. (2017) 'Comparison of six electromyography acquisition setups on hand movement classification tasks', *PLoS ONE*, 12(10), e0186132.
